@@ -1,0 +1,16 @@
+docker version
+docker run hello-world
+(jest w docker hubie taki obraz)
+docker ps - wyświetla wszystkie uruchomione kontenery
+docker ps -a -wyświetla wszystkie kontenery 
+docker start <dockerID>
+docker start inspiring_morse
+docker start -a inspiring_morse 
+docker stop
+docker image ls - lista obrazów zainstalowanych na komputerze
+jak się 2gi-3ci raz zrobi kontener hello world to tworzy się z obrazu pobranego na komputerze
+30:00 pobranie tylko obrazu na komputer
+docker pull
+docker run -e MYSQL_ROOT_PASSWORD=tajne mysql
+docker rm nervous_shaw - 1 metoda usuwania, jest jeszcze 2ga
+- sprawdzić + czym się różnią

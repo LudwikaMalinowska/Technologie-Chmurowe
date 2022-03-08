@@ -1,0 +1,20 @@
+2.
+docker pull hello-world
+docker run hello-world
+
+3.
+docker run hello-world
+docker start modest_brattain
+docker start -a modest_brattain
+
+docker run - tworzy kontener na podstawie obrazu
+docker start - uruchamia kontener
+docker start -a - uruchamia kontener, a parametr -a określa że 
+wynik polecenia w kontenerze ma się wyświetlić w naszej konsoli,
+np. przy uruchomieniu kontenera obrazu hello-world, wynik komendy hello
+wyświetli się u nas w terminalu
+
+4.
+docker ps -a
+docker rm modest_brattain - usuwa dany kontener
+docker container prune - usuwa wszystkie zastopowane kontenery
