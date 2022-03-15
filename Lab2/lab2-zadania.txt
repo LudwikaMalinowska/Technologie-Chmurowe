@@ -1,0 +1,56 @@
+Zadanie 1
+ docker pull busybox
+ docker run busybox echo "Hello world! I'm busybox!"
+
+Zadanie 2
+docker run -it busybox sh
+ls
+exit
+docker logs admiring_jang
+/ # ls
+bin   dev   etc   home  proc  root  sys   tmp   usr   var
+/ # exit
+
+
+Zadanie 3
+docker start admiring_jang
+docker exec admiring_jang echo "hello"
+
+Zadanie 4
+docker exec -it admiring_jang sh
+/ # echo "My first file" >> readme.txt
+/ # ls
+bin         etc         proc        root        tmp         var
+dev         home        readme.txt  sys         usr
+/ # cat readme.txt
+My first file
+/ # exit
+
+docker stop admiring_jang
+admiring_jang
+PS C:\Users\Lucy> docker start admiring_jang
+admiring_jang
+PS C:\Users\Lucy> docker exec -it admiring_jang sh
+/ # ls
+bin         etc         proc        root        tmp         var
+dev         home        readme.txt  sys         usr
+/ #
+
+Plik istnieje nadal
+
+
+Zadanie 5
+docker exec admiring_jang echo "Created from outside" >> createdFile.txt
+PS C:\Users\Lucy> docker exec -it admiring_jang sh
+/ # ls
+bin         etc         proc        root        tmp         var
+dev         home        readme.txt  sys         usr
+/ #
+
+
+Zadanie 6
+PS C:\Users\Lucy> docker create --name my_container busybox echo "Hello world from my container"
+35dc1f21e3ae21689850beb797759f6943a4c1ce277923288351b626d4133259
+PS C:\Users\Lucy> docker start -a my_container
+Hello world from my container
+PS C:\Users\Lucy>
