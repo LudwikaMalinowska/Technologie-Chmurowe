@@ -1,0 +1,5 @@
+FROM node:12.18-alpine
+COPY app.js package.json package-lock.json ./ 
+RUN npm i
+EXPOSE 8080
+CMD [ "node", "server.js" ]
