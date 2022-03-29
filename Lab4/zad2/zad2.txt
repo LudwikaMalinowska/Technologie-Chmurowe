@@ -1,0 +1,5 @@
+docker build -t lmalinowska/my_node_app .
+docker push lmalinowska/my_node_app
+
+repo:
+https://hub.docker.com/repository/docker/lmalinowska/my_node_app

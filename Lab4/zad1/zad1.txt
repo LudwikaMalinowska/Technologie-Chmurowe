@@ -1,0 +1,2 @@
+docker build . -t my_node_app
+docker run -p 8080:8080 -d --name my_app my_node_app

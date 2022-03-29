@@ -1,0 +1,7 @@
+FROM node:14
+WORKDIR /usr/src/my_node_app/
+COPY server.js package.json package-lock.json /usr/src/my_node_app/
+RUN npm i
+
+EXPOSE 8080
+CMD [ "node", "server.js" ]
