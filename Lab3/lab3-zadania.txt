@@ -6,3 +6,4 @@ docker run -it -d -p 4200:80 --name web nginx
 Zadanie 2
 docker build -t busybox-echo .
 docker run -it busybox-echo
+
