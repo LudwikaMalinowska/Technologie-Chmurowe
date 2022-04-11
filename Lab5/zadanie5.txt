@@ -1,0 +1,14 @@
+docker volume create pgdata
+
+docker run --name postgres-db --mount source=pgdata,target=/app -e POSTGRES_PASSWORD=docker -p 5432:5432 -d postgres
+
+
+PS C:\Users\Lucy> docker inspect postgres-db
+
+"Mounts": [
+                {
+                    "Type": "volume",
+                    "Source": "pgdata",
+                    "Target": "/app"
+                }
+            ],

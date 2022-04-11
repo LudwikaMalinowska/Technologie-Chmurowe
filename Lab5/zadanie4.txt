@@ -1,0 +1,22 @@
+PS C:\Users\Lucy> docker network ls
+NETWORK ID     NAME             DRIVER    SCOPE
+fef748d64625   bridge           bridge    local
+81d76f1e2e51   firstNetwork     bridge    local
+658d1fea2591   host             host      local
+e7339d34989f   none             null      local
+d81cc844c5d7   server_default   bridge    local
+
+PS C:\Users\Lucy> docker network rm firstNetwork
+firstNetwork
+
+PS C:\Users\Lucy> docker network ls
+NETWORK ID     NAME             DRIVER    SCOPE
+fef748d64625   bridge           bridge    local
+658d1fea2591   host             host      local
+e7339d34989f   none             null      local
+d81cc844c5d7   server_default   bridge    local
+
+PS C:\Users\Lucy> docker rm first
+first
+PS C:\Users\Lucy> docker rm second
+second
