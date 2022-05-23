@@ -1,0 +1,21 @@
+version: '3'
+
+services:
+  api:
+    build:
+      dockerfile: Dockerfile
+      context: ./MoviesAPI-main
+    environment:
+      - POSTGRES_PGHOST='127.0.0.1',
+      - POSTGRES_PGPORT=5432,
+      - POSTGRES_PGDATABASE='postgres',
+      - POSTGRES_PGUSER='postgres',
+      - POSTGRES_PGPASSWORD='tajne'
+    ports:
+      - 8000:5000
+  client:
+    build: 
+      dockerfile: Dockerfile
+      context: ./MoviesAPI-client/projekt
+    ports:
+      - 3000:3000

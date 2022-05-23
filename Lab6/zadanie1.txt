@@ -1,0 +1,8 @@
+docker-compose up
+
+
+
+docker-compose up - buduje kontener dla serwisu
+docker-compose up -d - odpala kontenery w tle --detach
+docker-compose stop - zatrzymuje kontenery bez ich usuwania
+docker-compose down --volumes  - usuwa wolumeny
