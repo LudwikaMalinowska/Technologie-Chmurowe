@@ -1,0 +1,17 @@
+version: '3'
+
+services:
+  frontend:
+    build:
+      dockerfile: Dockerfile.dev
+      context: .
+    environment:
+      CHOKIDAR_USEPOLLING: "true"
+    volumes:
+      - /my_app:/app
+  nginx:
+    build:
+      context: ./nginx
+      dockerfile: Dockerfile
+    ports:
+      - 80:80

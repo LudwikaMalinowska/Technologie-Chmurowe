@@ -1,0 +1,8 @@
+FROM node:alpine
+WORKDIR '/my_app'
+RUN npm install -g nodemon
+COPY ./package.json ./
+RUN npm install
+ADD public public
+ADD src src
+CMD npm run dev
