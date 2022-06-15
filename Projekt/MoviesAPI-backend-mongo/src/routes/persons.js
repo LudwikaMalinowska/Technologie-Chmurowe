@@ -1,6 +1,8 @@
 const express = require("express");
-const client = require('../config/psqlClient');
+const mongoose = require('mongoose');
 const router = express.Router({mergeParams: true});
+
+const Person = require("../../models/Person");
 
 const messages = {
     TITLE_DUPLICATE: 'TITLE_DUPLICATE',
@@ -8,41 +10,65 @@ const messages = {
 };
 
 router.get('/', async (req, res) => {
-    const persons = await client.query("SELECT * FROM person");
-    return res.send(persons.rows);
+    const query = Person.find({});
+    query.exec(function (err, persons) {
+      if (err) console.log(err);
+      return res.send({
+        allPersons: persons
+      });
+    })
 });
+
 
 router.get('/:id', async (req, res) => {
     const id = req.params.id;
+    const query = Person.findOne({"id": id})
+    query.exec(function (err, person) {
+      if (err) console.log(err);
+      if (person !== null)
+        return res.send(person);
+      else {
+        res.status(500).send(messages.ELEMENT_NOT_EXIST);
+      }
+    })
+});
 
-    const personsRows = await client.query("SELECT * FROM person WHERE id = $1", [id]); 
-
-    const person = personsRows.rows[0];
-
-    if(!person) {
-        return res.status(500).send(messages.ELEMENT_NOT_EXIST);
-    }
-
-    return res.send(person);
-  });
 
 router.post('/', async (req, res) => {
-    const personToAdd = req.body;
-
-    const insertedPersonRows = await client.query(
-        "INSERT INTO person (first_name, last_name, birth_date, nationality) VALUES ($1, $2, $3, $4) RETURNING *",
-        [personToAdd.first_name, personToAdd.last_name, personToAdd.birth_date, personToAdd.nationality]
-      );
-
-    const insertedPerson = insertedPersonRows.rows[0];
-    return res.send(insertedPerson);  
+    const newPerson = new Person({
+        "id": req.body.id,
+        "first_name": req.body.first_name,
+        "last_name": req.body.last_name,
+        "birth_date": req.body.birth_date,
+        "nationality": req.body.nationality
+    });
+    const u = await Person.findOne({"id": req.body.id})
+      .catch(err => console.log(err));
+    if (u === null) {
+      newPerson.save()
+      .then(result => {
+        return res.send(result);
+      })
+      .catch(err => {
+        res.status(500).json(err);
+      })
+    }
 });
+
+
 
 router.delete('/:id', async (req, res) => {
     const id = req.params.id;
-    const response = await client.query("DELETE from person WHERE id = $1", [id]);
-
-    return response.rowCount > 0 ? res.sendStatus(200) : res.sendStatus(400); 
+    
+    const query = Person.deleteOne({"id": id});
+    query.exec(function (err, person) {
+      if (err) console.log(err);
+      if (person !== null){
+        return res.send(user);
+      } else {
+        res.status(400).json({error: "User not found"})
+      }
+    })
 });
 
 router.put('/:id', async (req, res) => {
@@ -54,6 +80,32 @@ router.put('/:id', async (req, res) => {
     );
     
     return result.rowCount > 0 ? res.send(personToAdd) : res.sendStatus(400);
+});
+
+router.put("/:userId", async (req, res) => {
+    const id = req.params.id;
+
+    const updatedPerson = {
+        "first_name": req.body.first_name,
+        "last_name": req.body.last_name,
+        "birth_date": req.body.birth_date,
+        "nationality": req.body.nationality
+    }
+    const query = Person.findOneAndUpdate({"id": id}, {
+      $set: updatedPerson
+    });
+    query.exec(function (err, person) {
+      if (err) console.log(err);
+      if (person !== null) {
+        return res.send({
+          ...updatedPerson,
+          "id": id
+        });
+      }
+      else {
+        res.status(400).json({error: "Person not found"})
+      }
+    })
 });
 
 module.exports = router;

@@ -1,6 +1,9 @@
-const express = require("express");
-const client = require('../config/psqlClient');
+const express = require('express');
+const mongoose = require('mongoose');
 const router = express.Router({mergeParams: true});
+
+const Movie = require("../models/Movie");
+const Person = require("../models/Person");
 
 const messages = {
     TITLE_DUPLICATE: 'TITLE_DUPLICATE',
@@ -9,56 +12,74 @@ const messages = {
 };
 
 router.get('/', async (req, res) => {
-    const movies = await client.query("SELECT * FROM movie");
-    return res.send(movies.rows);
+    const query = Movie.find({});
+    query.exec(function (err, movies) {
+      if (err) console.log(err);
+      return res.send({
+        allMovies: movies
+      });
+    })
 });
 
 router.get('/:id', async (req, res) => {
     const id = req.params.id;
-
-    const movieRows = await client.query("SELECT * FROM movie WHERE id = $1", [id]); 
-
-    const movie = movieRows.rows[0];
-
-    if(!movie) {
-        return res.status(500).send(messages.ELEMENT_NOT_EXIST);
-    }
-
-    return res.send(movie);
-  });
+    const query = Movie.findOne({"id": id})
+    query.exec(function (err, movie) {
+      if (err) console.log(err);
+      if (movie !== null)
+        return res.send(movie);
+      else {
+        res.status(500).send(messages.ELEMENT_NOT_EXIST);
+      }
+    })
+});
 
 router.post('/', async (req, res) => {
     const movieToAdd = req.body;
-    const duplicate = await client.query("SELECT * FROM movie WHERE title = $1", [ movieToAdd.title ]);
-
-    if(duplicate.rows[0]) {
-        return res.status(500).send(messages.TITLE_DUPLICATE);
-    }
-
-    if(movieToAdd.director) {
-        const director = await client.query("SELECT * FROM person WHERE id = $1", [ movieToAdd.director.id ]);
-
-        if(!director.rows[0]) {
-            return res.status(500).send(messages.DIRECTOR_NOT_EXISTS);
-        }
     
+    const newMovie = new Movie({
+        id: Number,
+        title: String,
+        genre: String,
+        release_date: Date,
+        description: String,
+        image_url: String,
+        director_id: Number
+    });
+
+    const u = await Movie.findOne({"id": req.body.id})
+      .catch(err => console.log(err));
+    if (u === null) {
+      newMovie.save()
+      .then(result => {
+        return res.send(result);
+      })
+      .catch(err => {
+        res.status(500).send(messages.TITLE_DUPLICATE);
+      })
     }
-
-    const insertedMovieRows = await client.query(
-        "INSERT INTO movie (title, genre, release_date, description, image_url, director_id) VALUES ($1, $2, $3, $4, $5, $6) RETURNING *",
-        [movieToAdd.title, movieToAdd.genre, movieToAdd.release_date, movieToAdd.description, movieToAdd.image_url, movieToAdd.director ? movieToAdd.director.id : null]
-      );
-
-    const insertedMovie = insertedMovieRows.rows[0];
-    return res.send(insertedMovie);  
-});
+  });
 
 router.delete('/:id', async (req, res) => {
     const id = req.params.id;
-    const response = await client.query("DELETE from movie WHERE id = $1", [id]);
+    const query = Movie.deleteOne({"id": id});
+    query.exec(function (err, movie) {
+      if (err) console.log(err);
+      if (movie !== null){
+        return res.send(movie);
+      } else {
+        res.status(400).json({error: "Movie not found"})
+      }
+    })
+})
 
-    return response.rowCount > 0 ? res.sendStatus(200) : res.sendStatus(400); 
-});
+
+
+
+
+
+
+
 
 router.put('/:id', async (req, res) => {
     const movieToAdd = req.body;

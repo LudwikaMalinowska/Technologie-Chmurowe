@@ -3,8 +3,13 @@ const client = require('../config/psqlClient');
 const router = express.Router({mergeParams: true});
 
 router.get('/', async (req, res) => {
-    const actors = await client.query("SELECT * FROM actor");
-    return res.send(actors.rows);
+    const query = Actor.find({});
+    query.exec(function (err, actors) {
+      if (err) console.log(err);
+      return res.send({
+        allActors: actors
+      });
+    })
 });
 
 
