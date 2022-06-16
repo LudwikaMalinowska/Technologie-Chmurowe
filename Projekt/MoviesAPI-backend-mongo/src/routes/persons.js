@@ -1,6 +1,7 @@
 const express = require("express");
 const mongoose = require('mongoose');
 const router = express.Router({mergeParams: true});
+const redisClient = require("../config/redisClient");
 
 const Person = require("../models/Person");
 
@@ -11,8 +12,11 @@ const messages = {
 
 router.get('/', async (req, res) => {
     const query = Person.find({});
-    query.exec(function (err, persons) {
+    query.exec(async function (err, persons) {
       if (err) console.log(err);
+      const message = "GET Persons";
+      await redisClient.rpush("movieapp:logs", message);
+      
       return res.send(persons);
     })
 });
@@ -21,10 +25,13 @@ router.get('/', async (req, res) => {
 router.get('/:id', async (req, res) => {
     const id = req.params.id;
     const query = Person.findOne({"id": id})
-    query.exec(function (err, person) {
+    query.exec(async function (err, person) {
       if (err) console.log(err);
-      if (person !== null)
+      if (person !== null){
+        const message = "GET Person: id=" + id;
+        await redisClient.rpush("movieapp:logs", message);
         return res.send(person);
+      }
       else {
         res.status(500).send(messages.ELEMENT_NOT_EXIST);
       }
@@ -44,7 +51,9 @@ router.post('/', async (req, res) => {
     });
 
     newPerson.save()
-    .then(result => {
+    .then(async result => {
+      const message = "POST new Person: id=" + newId;
+      await redisClient.rpush("movieapp:logs", message);
       return res.send(result);
     })
     .catch(err => {
@@ -59,9 +68,11 @@ router.delete('/:id', async (req, res) => {
     const id = req.params.id;
     
     const query = Person.deleteOne({"id": id});
-    query.exec(function (err, person) {
+    query.exec(async function (err, person) {
       if (err) console.log(err);
       if (person !== null){
+        const message = "DELETE Person: id=" + id;
+        await redisClient.rpush("movieapp:logs", message);
         return res.send(person);
       } else {
         res.status(400).json({error: "User not found"})
@@ -82,9 +93,11 @@ router.put("/:id", async (req, res) => {
     const query = Person.findOneAndUpdate({"id": id}, {
       $set: updatedPerson
     });
-    query.exec(function (err, person) {
+    query.exec(async function (err, person) {
       if (err) console.log(err);
       if (person !== null) {
+        const message = "PUT Person: id=" + id;
+        await redisClient.rpush("movieapp:logs", message);
         return res.send({
           ...updatedPerson,
           "id": id
