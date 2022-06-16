@@ -4,6 +4,7 @@ const router = express.Router({mergeParams: true});
 
 const Movie = require("../models/Movie");
 const Person = require("../models/Person");
+const Actor = require("../models/Actor");
 
 const messages = {
     TITLE_DUPLICATE: 'TITLE_DUPLICATE',
@@ -15,9 +16,7 @@ router.get('/', async (req, res) => {
     const query = Movie.find({});
     query.exec(function (err, movies) {
       if (err) console.log(err);
-      return res.send({
-        allMovies: movies
-      });
+      return res.send(movies);
     })
 });
 
@@ -36,27 +35,30 @@ router.get('/:id', async (req, res) => {
 
 router.post('/', async (req, res) => {
     const movieToAdd = req.body;
-    
+    // const newId = "movie_" + Math.random().toString(16).substr(2, 8);
+    const newId = parseInt(Math.random() * 100000);
+    // console.log(Math.random().toString(16).substr(2, 8));
+
     const newMovie = new Movie({
-        id: Number,
-        title: String,
-        genre: String,
-        release_date: Date,
-        description: String,
-        image_url: String,
-        director_id: Number
+        id: newId,
+        title: movieToAdd.title,
+        genre: movieToAdd.genre,
+        release_date: movieToAdd.release_date,
+        description: movieToAdd.description,
+        image_url: movieToAdd.image_url,
+        director_id: movieToAdd.director_id
     });
 
-    const u = await Movie.findOne({"id": req.body.id})
+    const u = await Movie.findOne({"title": req.body.title})
       .catch(err => console.log(err));
     if (u === null) {
       newMovie.save()
       .then(result => {
         return res.send(result);
       })
-      .catch(err => {
-        res.status(500).send(messages.TITLE_DUPLICATE);
-      })
+      .catch(err => console.log(err));
+    } else {
+      res.status(500).send(messages.TITLE_DUPLICATE);
     }
   });
 
@@ -75,85 +77,112 @@ router.delete('/:id', async (req, res) => {
 
 
 
+router.put("/:id", async (req, res) => {
+  const movieToAdd = req.body;
+  const id = req.params.id;
 
+  if (movieToAdd.director){
+    const director = Person.findOne({"id": movieToAdd.director.id})
 
-
-
-
-
-router.put('/:id', async (req, res) => {
-    const movieToAdd = req.body;
-    const id = req.params.id;
-
-    if(movieToAdd.director) {
-        const director = await client.query("SELECT * FROM person WHERE id = $1", [ movieToAdd.director.id ]);
-
-        if(!director.rows[0]) {
-            return res.status(500).send(messages.DIRECTOR_NOT_EXISTS);
-        }
-    
+    if (director === null){
+      return res.status(500).send(messages.DIRECTOR_NOT_EXISTS);
     }
+  } else {
+    movieToAdd.director_id = null;
+  }
+  
+  const query = Movie.findOneAndUpdate({"id": id}, {$set: movieToAdd});
 
-    const result = await client.query(`UPDATE movie SET title = $1, genre = $2, release_date = $3, description = $4, image_url = $5, director_id = $6 WHERE id = $7`,
-        [movieToAdd.title, movieToAdd.genre, movieToAdd.release_date, movieToAdd.description, movieToAdd.image_url, movieToAdd.director ? movieToAdd.director.id : null, id]
-    );
-    
-    return result.rowCount > 0 ? res.send(movieToAdd) : res.sendStatus(400);
-});
+  query.exec(function (err, movie) {
+    if (err) console.log(err);
+    if (movie !== null) {
+      return res.send(movie);
+    }
+    else {
+      res.status(400).json({error: "Movie not found"})
+    }
+  })
+})
 
 
 router.patch('/:id/director', async (req, res) => {
-    const directorToSet = req.body;
-    const id = req.params.id;
+  const directorToSet = req.body;
+  const id = req.params.id;
+  
+  if(directorToSet) {
+      const director = Person.find({"id": directorToSet.id})
 
-    if(directorToSet) {
-        const director = await client.query("SELECT * FROM person WHERE id = $1", [ directorToSet.id ]);
+      if(director === null) {
+          return res.status(500).send(messages.DIRECTOR_NOT_EXISTS);
+      }
+  } 
 
-        if(!director.rows[0]) {
-            return res.status(500).send(messages.DIRECTOR_NOT_EXISTS);
-        }
-    
+  const dirId = directorToSet ? directorToSet.id : null;
+
+  const query = Movie.findOneAndUpdate({"id": id}, {$set: {"director_id": dirId}});
+
+  query.exec(function (err, movie) {
+    if (err) console.log(err);
+    if (movie !== null) {
+      return res.sendStatus(200);
     }
-
-    const result = await client.query(`UPDATE movie SET director_id = $1 WHERE id = $2`,
-        [directorToSet ? directorToSet.id : null, id]
-    );
-    
-    return result.rowCount > 0 ? res.sendStatus(200) : res.sendStatus(400);
+    else {
+      res.sendStatus(400)
+    }
+  })
 });
 
-
 router.get('/:id/actors', async (req, res) => {
-    const id = req.params.id;
-    const actors = await client.query("SELECT * FROM actor WHERE movie_id = $1", [ id ]);
-    return res.send(actors.rows);
+  const id = req.params.id;
+  const actors = Actor.findOne({"movie_id": id})
+  return res.send(actors);
 });
 
 router.post('/:id/actors', async (req, res) => {
-    const person = req.body;
-    const id = req.params.id;
+  const person = req.body;
+  const id = req.params.id;
 
-    const existingPerson = await client.query("SELECT * FROM person WHERE id = $1", [ person.id ]);
+  const existingPerson = Person.findOne({"id": person.id})
 
-    if(!existingPerson.rows[0]) {
-        return res.status(500).send(messages.ELEMENT_NOT_EXIST);
+  if(existingPerson === null) {
+      return res.status(500).send(messages.ELEMENT_NOT_EXIST);
+  }
+
+  const newId = parseInt(Math.random() * 100000);
+  const newActor = new Actor({
+    "id": newId,
+    "movie_id": id,
+    "person_id": person.id
+});
+
+  const u = await Actor.findOne({"id": newActor.id})
+      .catch(err => console.log(err));
+    if (u === null) {
+      newActor.save()
+      .then(result => {
+        return res.send(result);
+      })
+      .catch(err => {
+        res.status(400).json(err);
+      })
     }
 
-    const result = await client.query(`INSERT INTO actor (movie_id, person_id) VALUES ($1, $2) RETURNING *`,
-        [id, person.id]
-    );
-    
-    return result.rowCount > 0 ? res.send(result.rows[0]) : res.sendStatus(400);
+  
 });
 
 router.delete('/:id/actors/:idPerson', async (req, res) => {
-    const { id, idPerson } = req.params;
+  const { id, idPerson } = req.params;
 
-    const result = await client.query(`DELETE FROM actor WHERE movie_id = $1 AND person_id = $2`,
-        [id, idPerson]
-    );
-    
-    return result.rowCount > 0 ? res.sendStatus(200) : res.sendStatus(400); 
+  const query = Actor.deleteOne({"person_id": idPerson, "movie_id": id});
+  query.exec(function (err, actor) {
+    if (err) console.log(err);
+    if (actor !== null){
+      return res.sendStatus(200);
+    } else {
+      res.status(400);
+    }
+  })
+
 });
 
 

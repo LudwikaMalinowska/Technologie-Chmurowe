@@ -31,8 +31,13 @@ getActorList, movieActors}, props) => {
     }, []);
 
     const handleDelete = () => {
-        deleteMovie(movie);
-        alert("usunięto");
+        if (movieActors.length === 0){
+            deleteMovie(movie);
+            alert("usunięto");
+        } else {
+            alert("Usuń najpierw aktorów z filmu.")
+        }
+        
     }
 
     const handleActorAdd = () => {
