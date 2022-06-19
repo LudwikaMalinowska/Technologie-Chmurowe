@@ -1,0 +1,26 @@
+apiVersion: apps/v1
+kind: Deployment
+
+metadata:
+  name: redis-deployment
+  labels:
+    type: database
+    instance: redis
+
+spec:
+  template:
+    metadata:
+      name: redis-pod
+      labels:
+        type: database
+        instance: redis
+
+    spec:
+      containers:
+        - name: redis-container
+          image: redis:alpine
+  replicas: 1
+  selector:
+    matchLabels:
+      type: database
+      instance: redis

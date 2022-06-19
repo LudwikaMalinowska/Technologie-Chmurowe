@@ -1,0 +1,25 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: express-deployment
+  labels:
+    app: myapp
+    type: backend
+
+spec:
+  template:
+    metadata:
+      name: express-pod
+      labels:
+        app: myapp
+        type: backend
+    spec:
+      containers:
+        - name: express-container
+          # image: kubaen/mybackenlb
+
+  replicas: 2
+  selector:
+    matchLabels:
+      app: myapp
+      type: backend

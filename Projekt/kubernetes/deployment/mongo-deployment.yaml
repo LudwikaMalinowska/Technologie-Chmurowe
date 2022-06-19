@@ -1,0 +1,28 @@
+apiVersion: apps/v1
+kind: Deployment
+
+metadata:
+  name: mongo-deployment
+  labels:
+    type: database
+    instance: mongo
+
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      type: database
+      instance: mongo
+  template:
+    metadata:
+      name: mongo-pod
+      labels:
+        type: database
+        instance: mongo
+    spec:
+      containers:
+        - name: mongo-container
+          image: mongo:latest
+          envFrom:
+            - configMapRef:
+                name: mongo-configmap

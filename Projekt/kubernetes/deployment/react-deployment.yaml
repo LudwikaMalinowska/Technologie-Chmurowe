@@ -1,0 +1,27 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: react-deployment
+spec:
+  selector:
+    matchLabels:
+      type: frontend
+      instance: react
+  replicas: 2
+  template:
+    metadata:
+      name: react-pod
+      labels:
+        type: frontend
+        instance: react
+    spec:
+      containers:
+        - name: react-container
+          image: lmalinowska/devops-projekt-frontend:latest
+          ports:
+            - containerPort: 80
+              protocol: TCP
+          resources:
+            limits:
+              cpu: 100m
+              memory: 100Mi
