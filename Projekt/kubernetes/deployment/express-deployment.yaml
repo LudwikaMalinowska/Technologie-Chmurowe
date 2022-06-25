@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
         - name: express-container
-          # image: kubaen/mybackenlb
+          image: lmalinowska/devops-projekt-backend
 
   replicas: 2
   selector:

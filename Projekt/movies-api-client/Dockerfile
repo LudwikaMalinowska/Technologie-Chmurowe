@@ -1,11 +1,7 @@
-FROM node:alpine AS build
-WORKDIR '/movies-api-client'
+FROM node:latest AS build
+WORKDIR /app
 COPY ./package.json .
 RUN npm i
 COPY src src
 COPY public public
-CMD ["npm", "run", "build"]
-
-FROM nginx:alpine
-COPY ./nginx/default.conf /etc/nginx/conf.d/default.conf
-COPY --from=build /movies-api-client/build /usr/share/nginx/html
+RUN npm run build
