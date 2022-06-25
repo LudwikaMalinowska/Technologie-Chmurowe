@@ -2,11 +2,16 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: react-deployment
+  labels:
+    app: myapp
+    type: frontend
+
 spec:
   selector:
     matchLabels:
       type: frontend
       instance: react
+      app: myapp
   replicas: 2
   template:
     metadata:
@@ -14,10 +19,11 @@ spec:
       labels:
         type: frontend
         instance: react
+        app: myapp
     spec:
       containers:
         - name: react-container
-          image: lmalinowska/devops-projekt-frontend:latest
+          image: lmalinowska/devops-projekt-nginx:latest
           ports:
             - containerPort: 80
               protocol: TCP
