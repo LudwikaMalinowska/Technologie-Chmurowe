@@ -14,7 +14,12 @@ router.get('/', async (req, res) => {
     const query = Person.find({});
     query.exec(async function (err, persons) {
       if (err) console.log(err);
-      const message = "GET Persons";
+      const data = new Date();
+      const m = data.toLocaleDateString();
+      const time = data.toLocaleTimeString();
+      const dateTime = m + " " + time;
+
+      const message = dateTime + " GET Persons";
       await redisClient.rpush("movieapp:logs", message);
       
       return res.send(persons);
@@ -28,7 +33,12 @@ router.get('/:id', async (req, res) => {
     query.exec(async function (err, person) {
       if (err) console.log(err);
       if (person !== null){
-        const message = "GET Person: id=" + id;
+        const data = new Date();
+        const m = data.toLocaleDateString();
+        const time = data.toLocaleTimeString();
+        const dateTime = m + " " + time;
+
+        const message = dateTime + " GET Person: id=" + id;
         await redisClient.rpush("movieapp:logs", message);
         return res.send(person);
       }
@@ -52,7 +62,12 @@ router.post('/', async (req, res) => {
 
     newPerson.save()
     .then(async result => {
-      const message = "POST new Person: id=" + newId;
+      const data = new Date();
+      const m = data.toLocaleDateString();
+      const time = data.toLocaleTimeString();
+      const dateTime = m + " " + time;
+
+      const message = dateTime + " POST new Person: id=" + newId;
       await redisClient.rpush("movieapp:logs", message);
       return res.send(result);
     })
@@ -71,7 +86,12 @@ router.delete('/:id', async (req, res) => {
     query.exec(async function (err, person) {
       if (err) console.log(err);
       if (person !== null){
-        const message = "DELETE Person: id=" + id;
+        const data = new Date();
+        const m = data.toLocaleDateString();
+        const time = data.toLocaleTimeString();
+        const dateTime = m + " " + time;
+
+        const message = dateTime + " DELETE Person: id=" + id;
         await redisClient.rpush("movieapp:logs", message);
         return res.send(person);
       } else {
@@ -96,7 +116,12 @@ router.put("/:id", async (req, res) => {
     query.exec(async function (err, person) {
       if (err) console.log(err);
       if (person !== null) {
-        const message = "PUT Person: id=" + id;
+        const data = new Date();
+        const m = data.toLocaleDateString();
+        const time = data.toLocaleTimeString();
+        const dateTime = m + " " + time;
+
+        const message = dateTime + " PUT Person: id=" + id;
         await redisClient.rpush("movieapp:logs", message);
         return res.send({
           ...updatedPerson,

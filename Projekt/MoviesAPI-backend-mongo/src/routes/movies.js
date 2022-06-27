@@ -18,7 +18,12 @@ router.get('/', async (req, res) => {
     query.exec(async function (err, movies) {
       if (err) console.log(err);
       else {
-        const message = "GET Movies";
+        const data = new Date();
+        const m = data.toLocaleDateString();
+        const time = data.toLocaleTimeString();
+        const dateTime = m + " " + time;
+        
+        const message = dateTime + " GET Movies";
         await redisClient.rpush("movieapp:logs", message);
         return res.send(movies);
       }
@@ -31,7 +36,11 @@ router.get('/:id', async (req, res) => {
     query.exec(async function (err, movie) {
       if (err) console.log(err);
       if (movie !== null){
-        const message = "GET Movie: id=" + id;
+        const data = new Date();
+        const m = data.toLocaleDateString();
+        const time = data.toLocaleTimeString();
+        const dateTime = m + " " + time;
+        const message = dateTime + " GET Movie: id=" + id;
         await redisClient.rpush("movieapp:logs", message);
         return res.send(movie);
       }
@@ -60,7 +69,12 @@ router.post('/', async (req, res) => {
     if (u === null) {
       newMovie.save()
       .then(async result => {
-        const message = "POST new Movie id=" + newId;
+        const data = new Date();
+        const m = data.toLocaleDateString();
+        const time = data.toLocaleTimeString();
+        const dateTime = m + " " + time;
+
+        const message = dateTime + " POST new Movie id=" + newId;
         await redisClient.rpush("movieapp:logs", message);
         return res.send(result);
       })
@@ -76,7 +90,12 @@ router.delete('/:id', async (req, res) => {
     query.exec(async function (err, movie) {
       if (err) console.log(err);
       if (movie !== null){
-        const message = "DELETE Movie id=" + id;
+        const data = new Date();
+        const m = data.toLocaleDateString();
+        const time = data.toLocaleTimeString();
+        const dateTime = m + " " + time;
+
+        const message = dateTime + " DELETE Movie id=" + id;
         await redisClient.rpush("movieapp:logs", message);
         return res.send(movie);
       } else {
@@ -106,7 +125,12 @@ router.put("/:id", async (req, res) => {
   query.exec(async function (err, movie) {
     if (err) console.log(err);
     if (movie !== null) {
-      const message = "PUT Movie id=" + id;
+      const data = new Date();
+      const m = data.toLocaleDateString();
+      const time = data.toLocaleTimeString();
+      const dateTime = m + " " + time;
+
+      const message = dateTime + " PUT Movie id=" + id;
       await redisClient.rpush("movieapp:logs", message);
       return res.send(movie);
     }
@@ -136,7 +160,12 @@ router.patch('/:id/director', async (req, res) => {
   query.exec(async function (err, movie) {
     if (err) console.log(err);
     if (movie !== null) {
-      const message = "PATCH set director Movie id=" + id;
+      const data = new Date();
+      const m = data.toLocaleDateString();
+      const time = data.toLocaleTimeString();
+      const dateTime = m + " " + time;
+
+      const message = dateTime + " PATCH set director Movie id=" + id;
       await redisClient.rpush("movieapp:logs", message);
       return res.sendStatus(200);
     }
@@ -153,7 +182,12 @@ router.get('/:id/actors', async (req, res) => {
   query.exec(async function (err, actors) {
     if (err) console.log(err);
     else {
-      const message = "GET Movie Actors movie_id=" + id;
+      const data = new Date();
+      const m = data.toLocaleDateString();
+      const time = data.toLocaleTimeString();
+      const dateTime = m + " " + time;
+
+      const message = dateTime + " GET Movie Actors movie_id=" + id;
       await redisClient.rpush("movieapp:logs", message);
       return res.send(actors);
     }
@@ -182,7 +216,12 @@ router.post('/:id/actors', async (req, res) => {
     if (u === null) {
       newActor.save()
       .then(async result => {
-        const message = `POST Movie Actors movie_id=${id} person_id=${person.id}`;
+        const data = new Date();
+        const m = data.toLocaleDateString();
+        const time = data.toLocaleTimeString();
+        const dateTime = m + " " + time;
+
+        const message = `${dateTime} POST Movie Actors movie_id=${id} person_id=${person.id}`;
         await redisClient.rpush("movieapp:logs", message);
         return res.send(result);
       })
@@ -201,7 +240,12 @@ router.delete('/:id/actors/:idPerson', async (req, res) => {
   query.exec(async function (err, actor) {
     if (err) console.log(err);
     if (actor !== null){
-      const message = `DELETE Movie Actor movie_id=${id} person_id=${idPerson}`;
+      const data = new Date();
+      const m = data.toLocaleDateString();
+      const time = data.toLocaleTimeString();
+      const dateTime = m + " " + time;
+
+      const message = `${dateTime} DELETE Movie Actor movie_id=${id} person_id=${idPerson}`;
       await redisClient.rpush("movieapp:logs", message);
       return res.sendStatus(200);
     } else {
