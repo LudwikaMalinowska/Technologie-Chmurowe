@@ -7,11 +7,12 @@ const actorSchema = new schema.Entity('actors');
 const actorsSchema = [actorSchema];
 
 
-
+const endpoint = 'devops';
+// const endpoint = 'localhost:5000';
 
 export const getActorList = () => {
     return createAction({
-        endpoint: 'http://localhost:5000/api/actors',
+        endpoint: `http://${endpoint}/api/actors`,
         method: 'GET',
         headers: {
             'Content-Type': 'application/json'
@@ -35,7 +36,7 @@ export const getActorList = () => {
 
 export const getMovieActors = (movieId) => {
     return createAction({
-        endpoint: `http://localhost:5000/api/movies/${movieId}/actors`,
+        endpoint: `http://${endpoint}/api/movies/${movieId}/actors`,
         method: 'GET',
         headers: {
             'Content-Type': 'application/json'
@@ -58,7 +59,7 @@ export const getMovieActors = (movieId) => {
 
 export const addActor = (movieId, actor) => {
     return createAction({
-        endpoint: `http://localhost:5000/api/movies/${movieId}/actors`,
+        endpoint: `http://${endpoint}/api/movies/${movieId}/actors`,
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'
@@ -83,7 +84,7 @@ export const addActor = (movieId, actor) => {
 export const deleteMovieActor = (actor) => {
 
     return createAction({
-        endpoint: `http://localhost:5000/api/movies/${actor.movie_id}/actors/${actor.person_id}`,
+        endpoint: `http://${endpoint}/api/movies/${actor.movie_id}/actors/${actor.person_id}`,
         method: 'DELETE',
         headers: {
             'Content-Type': 'application/json'

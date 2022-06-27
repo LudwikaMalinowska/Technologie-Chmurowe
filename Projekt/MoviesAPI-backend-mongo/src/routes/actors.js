@@ -12,7 +12,7 @@ router.get('/', async (req, res) => {
         message += "Error."
         await redisClient.rpush("movieapp:logs", message);
         // console.log(err);
-        return res.send(err);
+        console.log(err);
       }
       else {
         message += "Success."

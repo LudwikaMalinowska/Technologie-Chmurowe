@@ -6,10 +6,12 @@ const movieSchema = new schema.Entity('movies');
 const moviesSchema = [movieSchema];
 
 
+const endpoint = 'devops';
+// const endpoint = 'localhost:5000';
 
 export const getMovieList = () => {
     return createAction({
-        endpoint: 'http://localhost:5000/api/movies',
+        endpoint: `http://${endpoint}/api/movies`,
         method: 'GET',
         headers: {
             'Content-Type': 'application/json'
@@ -36,7 +38,7 @@ export const getMovieList = () => {
 
 export const getMovie = (movieId) => {
     return createAction({
-        endpoint: `http://localhost:5000/api/movies/${movieId}`,
+        endpoint: `http://${endpoint}/api/movies/${movieId}`,
         method: 'GET',
         headers: {
             'Content-Type': 'application/json'
@@ -59,7 +61,7 @@ export const getMovie = (movieId) => {
 
 export const createMovie = (newMovie) => {
     return createAction({
-        endpoint: 'http://localhost:5000/api/movies',
+        endpoint: `http://${endpoint}/api/movies`,
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'
@@ -84,7 +86,7 @@ export const createMovie = (newMovie) => {
 export const editMovie = (editedMovie) => {
 
     return createAction({
-        endpoint: `http://localhost:5000/api/movies/${editedMovie.id}`,
+        endpoint: `http://${endpoint}/api/movies/${editedMovie.id}`,
         method: 'PUT',
         headers: {
             'Content-Type': 'application/json'
@@ -109,7 +111,7 @@ export const editMovie = (editedMovie) => {
 export const deleteMovie = (movieToDelete) => {
 
     return createAction({
-        endpoint: `http://localhost:5000/api/movies/${movieToDelete.id}`,
+        endpoint: `http://${endpoint}/api/movies/${movieToDelete.id}`,
         method: 'DELETE',
         headers: {
             'Content-Type': 'application/json'
@@ -133,7 +135,7 @@ export const deleteMovie = (movieToDelete) => {
 export const setMovieDirector = (movie, director) => {
 
     return createAction({
-        endpoint: `http://localhost:5000/api/movies/${movie.id}/director`,
+        endpoint: `http://${endpoint}/api/movies/${movie.id}/director`,
         method: 'PATCH',
         headers: {
             'Content-Type': 'application/json'

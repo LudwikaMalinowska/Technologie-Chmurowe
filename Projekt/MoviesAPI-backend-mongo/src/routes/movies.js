@@ -16,7 +16,7 @@ const messages = {
 router.get('/', async (req, res) => {
     const query = Movie.find({});
     query.exec(async function (err, movies) {
-      if (err) return res.send(err);
+      if (err) console.log(err);
       else {
         const message = "GET Movies";
         await redisClient.rpush("movieapp:logs", message);
@@ -148,11 +148,16 @@ router.patch('/:id/director', async (req, res) => {
 
 router.get('/:id/actors', async (req, res) => {
   const id = req.params.id;
-  const actors = Actor.findOne({"movie_id": id})
+  const query = Actor.find({"movie_id": id})
 
-  const message = "GET Movie Actors movie_id=" + id;
-  await redisClient.rpush("movieapp:logs", message);
-  return res.send(actors);
+  query.exec(async function (err, actors) {
+    if (err) console.log(err);
+    else {
+      const message = "GET Movie Actors movie_id=" + id;
+      await redisClient.rpush("movieapp:logs", message);
+      return res.send(actors);
+    }
+  })
 });
 
 router.post('/:id/actors', async (req, res) => {

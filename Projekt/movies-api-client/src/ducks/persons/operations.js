@@ -7,10 +7,12 @@ const personsSchema = [personSchema];
 
 
 
+const endpoint = 'devops';
+// const endpoint = 'localhost:5000';
 
 export const getPersonList = () => {
     return createAction({
-        endpoint: 'http://localhost:5000/api/persons',
+        endpoint: `http://${endpoint}/api/persons`,
         method: 'GET',
         headers: {
             'Content-Type': 'application/json',
@@ -37,7 +39,7 @@ export const getPersonList = () => {
 
 export const getPerson = (personId) => {
     return createAction({
-        endpoint: `http://localhost:5000/api/persons/${personId}`,
+        endpoint: `http://${endpoint}/api/persons/${personId}`,
         method: 'GET',
         headers: {
             'Content-Type': 'application/json'
@@ -61,7 +63,7 @@ export const getPerson = (personId) => {
 export const createPerson = (newPerson) => {
     
     return createAction({
-        endpoint: 'http://localhost:5000/api/persons',
+        endpoint: `http://${endpoint}/api/persons`,
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'
@@ -86,7 +88,7 @@ export const createPerson = (newPerson) => {
 export const editPerson = (editedPerson) => {
 
     return createAction({
-        endpoint: `http://localhost:5000/api/persons/${editedPerson.id}`,
+        endpoint: `http://${endpoint}/api/persons/${editedPerson.id}`,
         method: 'PUT',
         headers: {
             'Content-Type': 'application/json'
@@ -111,7 +113,7 @@ export const editPerson = (editedPerson) => {
 export const deletePerson = (personToDelete) => {
 
     return createAction({
-        endpoint: `http://localhost:5000/api/persons/${personToDelete.id}`,
+        endpoint: `http://${endpoint}/api/persons/${personToDelete.id}`,
         method: 'DELETE',
         headers: {
             'Content-Type': 'application/json'
