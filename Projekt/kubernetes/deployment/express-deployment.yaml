@@ -22,6 +22,9 @@ spec:
       containers:
         - name: express-container
           image: lmalinowska/devops-projekt-backend
+          envFrom:
+            - configMapRef:
+                name: express-configmap
           resources:
             limits:
               cpu: 100m

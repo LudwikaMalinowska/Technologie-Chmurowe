@@ -4,21 +4,21 @@ kind: Deployment
 metadata:
   name: mongo-deployment
   labels:
-    type: database
-    instance: mongo
+    type: mongodb
+    app: myapp
 
 spec:
   replicas: 1
   selector:
     matchLabels:
-      type: database
-      instance: mongo
+      type: mongodb
+      app: myapp
   template:
     metadata:
       name: mongo-pod
       labels:
-        type: database
-        instance: mongo
+        type: mongodb
+        app: myapp
     spec:
       containers:
         - name: mongo-container

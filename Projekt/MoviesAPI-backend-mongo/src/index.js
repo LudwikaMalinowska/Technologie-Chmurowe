@@ -12,10 +12,10 @@ const persons = require('./routes/persons');
 const actors = require('./routes/actors');
 const logs = require('./routes/logs');
 
-app.use("/api/movies", movies);
-app.use("/api/persons", persons);
-app.use("/api/actors", actors);
-app.use("/api/logs", logs);
+app.use("/movies", movies);
+app.use("/persons", persons);
+app.use("/actors", actors);
+app.use("/logs", logs);
 
 require('dotenv').config();
 const dbConnData = {
@@ -26,6 +26,7 @@ const dbConnData = {
   // redis_host: process.env.REDIS_HOST || '127.0.0.1',
   // redis_port: process.env.REDIS_PORT || 6379,
 };
+console.log(dbConnData);
 const mongoose = require('mongoose');
 const redis = require('ioredis')
 
@@ -63,7 +64,7 @@ mongoose
   .catch(error => console.error('Error connecting to MongoDB', error));
 
 app.listen(dbConnData.port, () => {
-    console.log(`API server listening at http://localhost:${dbConnData.port}`);
+    console.log(`TEST - API server listening at http://localhost:${dbConnData.port}`);
 });
 
 

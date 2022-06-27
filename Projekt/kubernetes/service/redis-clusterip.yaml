@@ -11,6 +11,5 @@ spec:
       targetPort: 6379
       protocol: TCP
   selector:
-    app: myapp
     type: database
     instance: redis

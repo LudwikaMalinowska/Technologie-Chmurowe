@@ -3,6 +3,8 @@ kind: ConfigMap
 
 metadata:
   name: mongo-configmap
-
+  labels:
+    type: mongodb
+    app: myapp
 data:
   MONGO_DATABASE: devops
