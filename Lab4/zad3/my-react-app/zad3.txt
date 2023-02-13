@@ -1,2 +1,0 @@
-docker build . -t my_react_app
-docker run -p 3100:3000 -d --name my_react_app my_react_app
