@@ -1,3 +1,0 @@
-FROM node:12.18-alpine
-COPY script.js ./
-CMD node script.js

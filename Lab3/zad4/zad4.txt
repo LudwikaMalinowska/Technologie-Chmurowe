@@ -1,3 +1,0 @@
-docker build . -t my_script
-$ docker run --name script my_script
-Hello console

@@ -1,2 +1,0 @@
-docker build -t webserver .
-docker run -it --rm -d -p 4200:80 --name web webserver
