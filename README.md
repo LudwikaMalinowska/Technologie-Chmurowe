@@ -3,33 +3,34 @@
 A Web Application in React with database in MongoDB and Redis, made for Cloud Technologies course in University of Gdansk in June 2022.
 In the application you can add, delete, edit and search for movies stored in the database.
 Client repository: https://github.com/LudwikaMalinowska/MoviesAPI-2022
+
 MongoDB database stores information about movies, persons and actors, while Redis database stores the logs of all the 
 operations on the backend GET/POST/PUT/PATCH/DELETE.
 
 
 To run the application:
 
-While in the /Projekt/ directory: 
+- While in the /Projekt/ directory: 
 
-kubectl apply -f kubernetes/configmap/
-kubectl apply -f kubernetes/service/
-kubectl apply -f kubernetes/deployment/
-kubectl apply -f kubernetes/volumes/
-kubectl apply -f kubernetes/volumeclaims/
-kubectl apply -f kubernetes/ingress/
+- kubectl apply -f kubernetes/configmap/
+- kubectl apply -f kubernetes/service/
+- kubectl apply -f kubernetes/deployment/
+- kubectl apply -f kubernetes/volumes/
+- kubectl apply -f kubernetes/volumeclaims/
+- kubectl apply -f kubernetes/ingress/
 
 
 Checking if API works:
 
-curl devops/api/movies
-curl devops/api/persons
-curl devops/api/actors
-curl devops/api/logs - endpoint bazy redis
+- curl devops/api/movies
+- curl devops/api/persons
+- curl devops/api/actors
+- curl devops/api/logs - endpoint bazy redis
 
 
 Frontend works on page:
 
-http://devops
+- http://devops
 
 
 ![image](https://user-images.githubusercontent.com/58569359/157292722-d6dd807a-3246-4fbd-9bde-921355a8924b.png)
