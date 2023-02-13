@@ -1,5 +1,0 @@
-
-
-docker pull busybox
-docker run busybox sh - uruchomienie shella
-docker run -it busybox sh - łączy input i output shella z naszym
